@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:17.4
+    restart: always
+    ports:
+      - "5430:5432"
+    environment:
+      POSTGRES_DB: URLuserDB
+      POSTGRES_USER: user123
+      POSTGRES_PASSWORD: admin123
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
