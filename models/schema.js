@@ -2,6 +2,11 @@ import {uuid,pgTable,varchar,text,timestamp} from 'drizzle-orm/pg-core';
 
 export const usersTable = pgTable('users',{
     id: uuid().primaryKey().defaultRandom(),
+    name: varchar({length: 255}),
+    email: varchar({length: 255}).notNull().unique(),
+    password: text().notNull(),
+    salt: text().notNull(),
+    
     
 })
 

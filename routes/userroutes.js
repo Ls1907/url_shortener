@@ -1,20 +1,24 @@
 import express from "express";
-import {db} from "./db.js";
-import {usersTable} from "../models/schema.js";
-import {crypto,createHmac} from "node:crypto";
+import db from "../db/index.js";
+import { usersTable } from "../models/index.js";
+import { randomBytes, createHmac } from "node:crypto";
+import { eq } from "drizzle-orm";
 
 const router  = express.Router();
 
 
 router.get('/signup', async(req,res)=>{
-    const {name,email,password} = req.body;
-    const existingUser = await db.Select().from(usersTable).where(eq(usersTable.email,email));
+      const { name, email, password } = req.body;
+      const [existingUser] = await db
+         .select({ email: usersTable.email })
+         .from(usersTable)
+         .where(eq(usersTable.email, email));
     if(existingUser){
         return res.status(400).json({message: "User already exists please login"});
     }
   
-    const salt = crypto.randomBytes(256).toString('hex');
-    const hashedPassword = createHmac('sha256',salt).update(password).digest('hex');
+   const salt = randomBytes(256).toString("hex");
+   const hashedPassword = createHmac("sha256", salt).update(password).digest("hex");
 
      const [newUser] = await db.insert(usersTable).values({
         name,

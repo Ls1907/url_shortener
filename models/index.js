@@ -1,3 +1,3 @@
-import { usersTable } from "./schema";
+import { usersTable } from "./schema.js";
 
-module.exports  = {usersTable};
+export { usersTable };
